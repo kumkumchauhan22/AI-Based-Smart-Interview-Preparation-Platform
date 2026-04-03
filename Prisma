@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Resume {
+  id         String   @id @default(cuid())
+  userId     Int
+  fileName   String
+  fileSize   Int
+  fileType   String
+  content    Bytes
+  uploadedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("resumes")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String
+  email        String        @unique
+  createdAt    DateTime      @default(now())
+  performances Performance[]
+  sessions     Session[]
+  resumes      Resume[]
+
+  @@map("users")
+}
+
+model Session {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@map("sessions")
+}
+
+model Performance {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  score     Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("performances")
+}
