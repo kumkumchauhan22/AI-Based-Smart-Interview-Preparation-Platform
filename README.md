@@ -82,7 +82,7 @@ Step 5: Start project
 npm run dev
 
 Project will run on:
-http://localhost:3000
+local host
 
 ---
 
